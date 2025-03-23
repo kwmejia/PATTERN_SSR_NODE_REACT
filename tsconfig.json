@@ -11,10 +11,10 @@
     "emitDecoratorMetadata": true,
     "baseUrl": "./src",
     "paths": {
-      "@app/*": ["app/*"],
-      "@infra/*": ["infrastructure/*"],
-      "@domain/*": ["domain/*"],
-      "@presentation/*": ["presentation/*"]
+      "@app/*": ["server/app/*"],
+      "@infra/*": ["server/infrastructure/*"],
+      "@domain/*": ["server/domain/*"],
+      "@presentation/*": ["server/presentation/*"]
     }
   }
 }
