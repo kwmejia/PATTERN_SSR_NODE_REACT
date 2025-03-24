@@ -7,6 +7,8 @@ import { BookFactory } from "@domain/factories/BookFactory";
 import { AppDataSource } from "@infra/database/data-source";
 import { CreateBookDto } from "@app/dtos/books/CreateBookDto";
 import { CloneBookDto } from "@app/dtos/books/CloneBookDto";
+import { renderAdminBooksView } from "@presentation/renders/renderAdminBooks";
+import { BookAdapter } from "@domain/adapters/BookAdapter";
 
 const bookRepo = AppDataSource.getRepository(Book);
 
@@ -85,4 +87,12 @@ export const cloneBookController = async (
     console.error("Error al clonar libro:", error);
     res.status(500).json({ message: "Error al clonar libro" });
   }
+};
+
+
+
+export const getBookAdminController = async (_req: Request, res: Response) => {
+  const books = await bookRepo.find();
+  const html = renderAdminBooksView(BookAdapter.toClientMany(books));
+  res.send(html);
 };

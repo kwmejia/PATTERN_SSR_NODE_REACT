@@ -6,6 +6,9 @@ import { User } from "@domain/models/User";
 import { UserFactory } from "@domain/factories/UserFactory";
 import { AppDataSource } from "@infra/database/data-source";
 import { CreateUserDto } from "@app/dtos/users/CreateUserDto";
+import { renderRegister } from "@presentation/renders/renderRegister";
+import { renderUserDashboard } from "@presentation/renders/renderUserDashboard";
+import { AuthRequest } from "@infra/middleware/auth.middleware";
 
 const userRepo = AppDataSource.getRepository(User);
 
@@ -48,4 +51,14 @@ export const getUsersController = async (
 ): Promise<void> => {
   const users = await userRepo.find();
   res.json(users);
+};
+
+export const getRegisterController = (_req: Request, res: Response) => {
+  const html = renderRegister();
+  res.send(html);
+};
+
+export const getDashboardUserController = (req: AuthRequest, res: Response) => {
+  const html = renderUserDashboard(req.user!);
+  res.send(html);
 };

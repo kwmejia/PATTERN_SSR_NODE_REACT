@@ -49,6 +49,7 @@ export const createReservationController = async (
     user: { id: req.user?.id },
   });
 
+
   if (currentReservations >= max) {
     res.status(403).json({ message: "Has alcanzado el límite de reservas" });
     return;

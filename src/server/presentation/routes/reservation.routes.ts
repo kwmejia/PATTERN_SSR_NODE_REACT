@@ -8,7 +8,7 @@ import { authMiddleware, isAdmin } from "@infra/middleware/auth.middleware";
 
 const router = Router();
 
-router.post("/", createReservationController);
+router.post("/", authMiddleware, createReservationController);
 router.get("/", [authMiddleware, isAdmin], getReservationsController);
 router.get("/me", authMiddleware, getMyReservationsController);
 

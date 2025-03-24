@@ -1,24 +1,33 @@
-// Importamos la fuente de datos de TypeORM (ya configurada)
 import { DataSource } from "typeorm";
 import { AppDataSource } from "@infra/database/data-source";
 
 /**
- * Clase que implementa el patrón Singleton para la base de datos.
- * Asegura que solo haya una única instancia de conexión activa durante la app.
+ * Singleton wrapper around the TypeORM `DataSource` instance.
+ *
+ * Ensures that only one database connection is established and reused
+ * throughout the entire application lifecycle.
+ *
+ * This prevents multiple database connections and allows consistent
+ * access to the same connection across all modules.
  */
 export class DatabaseSingleton {
-  // Variable estática que almacenará la instancia única de DataSource
+  /**
+   * Holds the single instance of the database connection.
+   */
   private static instance: DataSource;
 
-  // Constructor privado para evitar que se instancie esta clase desde fuera
+  /**
+   * Private constructor to prevent direct instantiation.
+   */
   private constructor() {}
 
   /**
-   * Método estático que retorna la única instancia de DataSource
-   * Si no existe, la inicializa.
+   * Provides access to the single database connection instance.
+   * Initializes it lazily on the first call.
+   *
+   * @returns {Promise<DataSource>} - The initialized TypeORM data source.
    */
   public static async getInstance(): Promise<DataSource> {
-    // Si no se ha creado aún la instancia, la inicializamos
     if (!DatabaseSingleton.instance) {
       DatabaseSingleton.instance = await AppDataSource.initialize();
       console.log("✅ Database initialized (Singleton)");

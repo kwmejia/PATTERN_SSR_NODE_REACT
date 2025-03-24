@@ -1,3 +1,4 @@
+import path from "path";
 import express from "express";
 import dotenv from "dotenv";
 import "reflect-metadata";
@@ -13,9 +14,16 @@ import authRoutes from "@presentation/routes/auth.routes";
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 3002;
+const PORT = process.env.PORT || 3003;
+
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+
+app.use(
+  '/static',
+  express.static(path.join(__dirname, '../../public/static'))
+);
 
 app.use("/auth", authRoutes);
 app.use("/books", bookRoutes);

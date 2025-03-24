@@ -9,6 +9,7 @@ import { User } from "@domain/models/User";
 import { LoginDto } from "@app/dtos/auth/LoginDto";
 import { AppDataSource } from "@infra/database/data-source";
 import { AuthRequest } from "@infra/middleware/auth.middleware";
+import { renderLogin } from "@presentation/renders/renderLogin";
 
 const userRepo = AppDataSource.getRepository(User);
 
@@ -41,7 +42,7 @@ export const loginController = async (
     }
 
     const token = jwt.sign(
-      { id: user.id, email: user.email, role: user.role },
+      { id: user.id, name: user.name, email: user.email, role: user.role },
       process.env.JWT_SECRET as string,
       { expiresIn: "1h" }
     );
@@ -52,8 +53,9 @@ export const loginController = async (
       sameSite: "lax",
       maxAge: 1000 * 60 * 60, // 1 hora
     });
+    
 
-    res.json({ message: "Login exitoso" });
+    res.json({ message: "Login exitoso", user });
   } catch (error) {
     console.error("Error en login:", error);
     res.status(500).json({ message: "Error en el servidor" });
@@ -69,13 +71,17 @@ export const logoutController = (_req: Request, res: Response): void => {
   res.json({ message: "Sesión cerrada exitosamente" });
 };
 
-
 export const meController = (req: AuthRequest, res: Response): void => {
   if (!req.user) {
-    res.status(401).json({ message: 'No autenticado' });
+    res.status(401).json({ message: "No autenticado" });
     return;
   }
 
   const { id, email, role } = req.user;
   res.json({ id, email, role });
+};
+
+export const getLoginController = (_req: Request, res: Response) => {
+  const html = renderLogin();
+  res.send(html);
 };
