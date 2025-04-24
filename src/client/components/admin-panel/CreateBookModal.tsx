@@ -21,7 +21,7 @@ export const CreateBookModal: React.FC<Props> = ({
   onCreate,
 }) => {
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
+    <div className="fixed inset-0  bg-white/60 bg-opacity-30 flex items-center justify-center z-50">
       <form
         onSubmit={(e) => {
           e.preventDefault();
