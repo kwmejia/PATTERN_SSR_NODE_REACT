@@ -9,6 +9,7 @@ import { CreateBookDto } from "@app/dtos/books/CreateBookDto";
 import { CloneBookDto } from "@app/dtos/books/CloneBookDto";
 import { renderAdminBooksView } from "@presentation/renders/renderAdminBooks";
 import { BookAdapter } from "@domain/adapters/BookAdapter";
+import { AuthRequest } from "@infra/middleware/auth.middleware";
 
 const bookRepo = AppDataSource.getRepository(Book);
 
@@ -89,10 +90,11 @@ export const cloneBookController = async (
   }
 };
 
-
-
-export const getBookAdminController = async (_req: Request, res: Response) => {
+export const getBookAdminController = async (
+  req: AuthRequest,
+  res: Response
+) => {
   const books = await bookRepo.find();
-  const html = renderAdminBooksView(BookAdapter.toClientMany(books));
+  const html = renderAdminBooksView(BookAdapter.toClientMany(books), req.user!);
   res.send(html);
 };

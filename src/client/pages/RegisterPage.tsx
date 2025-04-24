@@ -1,3 +1,4 @@
+import { ROUTES } from "@client/utils/router";
 import React, { useState } from "react";
 
 export const RegisterPage: React.FC = () => {
@@ -44,7 +45,7 @@ export const RegisterPage: React.FC = () => {
           <div className="mb-4 text-center">
             <p className="text-green-600 text-sm mb-2">{sucMsg}</p>
             <a
-              href="/auth/login"
+              href={ROUTES.LOGIN}
               className="text-blue-600 text-sm hover:underline"
             >
               Inicia sesión ahora
@@ -108,7 +109,7 @@ export const RegisterPage: React.FC = () => {
 
         <p className="mt-6 text-sm text-center text-gray-600">
           ¿Ya tienes cuenta?{" "}
-          <a href="/auth/login" className="text-blue-600 hover:underline">
+          <a href={ROUTES.LOGIN} className="text-blue-600 hover:underline">
             Inicia sesión
           </a>
         </p>

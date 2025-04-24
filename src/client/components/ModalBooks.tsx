@@ -2,18 +2,21 @@ import { useAlert } from "@client/context/AlertContext";
 import { Book } from "@domain/models/Book";
 import React, { useEffect, useState } from "react";
 
-
 interface IPropsModalBooks {
   userId: string;
   onCloseModal: () => void;
   callReservations: () => void;
 }
 
-export const ModalBooks = ({ onCloseModal, callReservations, userId }: IPropsModalBooks) => {
+export const ModalBooks = ({
+  onCloseModal,
+  callReservations,
+  userId,
+}: IPropsModalBooks) => {
   const [selectedBookId, setSelectedBookId] = useState("");
   const [books, setBooks] = useState<Book[]>([]);
   const [error, setError] = useState<string>("");
-  const { notify } = useAlert();
+  const alert = useAlert();
   useEffect(() => {
     onMounted();
   }, []);
@@ -40,11 +43,21 @@ export const ModalBooks = ({ onCloseModal, callReservations, userId }: IPropsMod
       });
 
       if (resp.ok) {
-        notify("success","Reserva creada correctamente!")
         callReservations();
         onCloseModal();
+      } else {
+        const { message } = await resp.json();
+        alert.notify(
+          "error",
+          message || "Ocurrió un error al hacer la reserva"
+        );
       }
     } catch (error: any) {
+      console.log(error);
+      alert.notify(
+        "error",
+        error.message || "Ocurrió un error al hacer la reserva"
+      );
       setError(error.message || "Ocurrió un error al hacer la reserva");
     }
   };

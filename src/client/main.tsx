@@ -6,12 +6,14 @@ import { AlertProvider } from "@client/context/AlertContext";
 import { AdminBooksPage } from "@client/pages/AdminBooksPage";
 import { UserDashboardPage } from "@client/pages/UserDashboardPage";
 import "@client/assets/styles/index.css";
+import { AdminReservationsPage } from "@client/pages/AdminReservationsPage";
 
 const PAGE_MAP: Record<string, React.FC<any>> = {
   login: LoginPage,
   register: RegisterPage,
   userDashboard: UserDashboardPage,
   booksAdmin: AdminBooksPage,
+  reservationsAdmin: AdminReservationsPage,
 };
 
 const pageId = (window as any).__SSR_PAGE__;

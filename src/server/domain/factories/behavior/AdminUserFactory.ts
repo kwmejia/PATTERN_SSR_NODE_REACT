@@ -1,5 +1,5 @@
-import { UserBehavior } from "@domain/factories/UserBehavior";
-import { UserFactoryRole } from "@domain/factories/UserFactoryRole";
+import { UserBehavior } from "@domain/factories/behavior/UserBehavior";
+import { UserFactoryRole } from "@domain/factories/behavior/UserFactoryRole";
 
 /**
  * Factory class for creating admin-specific user behavior.

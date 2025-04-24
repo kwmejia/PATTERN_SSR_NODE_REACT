@@ -2,9 +2,9 @@ import jwt from "jsonwebtoken";
 import { Request, Response, NextFunction } from "express";
 
 import { JwtPayload } from "@app/types/JwtPayload";
-import { UserBehavior } from "@domain/factories/UserBehavior";
-import { AdminUserFactory } from "@domain/factories/AdminUserFactory";
-import { RegularUserFactory } from "@domain/factories/RegularUserFactory";
+import { UserBehavior } from "@domain/factories/behavior/UserBehavior";
+import { AdminUserFactory } from "@domain/factories/behavior/AdminUserFactory";
+import { RegularUserFactory } from "@domain/factories/behavior/RegularUserFactory";
 
 export interface AuthRequest extends Request {
   user?: JwtPayload;

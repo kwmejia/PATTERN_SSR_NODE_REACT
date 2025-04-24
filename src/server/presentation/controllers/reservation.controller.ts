@@ -12,6 +12,8 @@ import { AppDataSource } from "@infra/database/data-source";
 import { AuthRequest } from "@infra/middleware/auth.middleware";
 
 import { CreateReservationDto } from "@app/dtos/reservations/CreateReservationDto";
+import { renderAdminBooksView } from "@presentation/renders/renderAdminBooks";
+import { renderAdminReservationsView } from "@presentation/renders/renderAdminReservations";
 
 const userRepo = AppDataSource.getRepository(User);
 const bookRepo = AppDataSource.getRepository(Book);
@@ -97,4 +99,16 @@ export const getMyReservationsController = async (
     console.log(error);
     res.status(500).json({ message: "Error al obtener reservas" });
   }
+};
+
+
+export const getReservationsAdminController = async (
+  req: AuthRequest,
+  res: Response
+) => {
+  const reservations = await reservationRepo.find({
+    relations: ["user", "book"],
+  });
+  const html = renderAdminReservationsView(reservations, req.user!);
+  res.send(html);
 };

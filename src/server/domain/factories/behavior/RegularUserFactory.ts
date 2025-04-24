@@ -1,5 +1,5 @@
-import { UserBehavior } from "@domain/factories/UserBehavior";
-import { UserFactoryRole } from "@domain/factories/UserFactoryRole";
+import { UserBehavior } from "@domain/factories/behavior/UserBehavior";
+import { UserFactoryRole } from "@domain/factories/behavior/UserFactoryRole";
 
 /**
  * Factory class for creating behavior specific to regular (non-admin) users.
@@ -11,7 +11,7 @@ import { UserFactoryRole } from "@domain/factories/UserFactoryRole";
  * Regular users:
  * - Cannot create books
  * - Can reserve books
- * - Are limited to 30 active reservations
+ * - Are limited to 5 active reservations
  */
 export class RegularUserFactory implements UserFactoryRole {
   /**
@@ -23,7 +23,7 @@ export class RegularUserFactory implements UserFactoryRole {
     return {
       canCreateBooks: () => false,
       canReserveBooks: () => true,
-      maxReservations: () => 30,
+      maxReservations: () => 5,
     };
   }
 }

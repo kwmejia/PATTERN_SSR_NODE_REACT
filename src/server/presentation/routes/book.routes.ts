@@ -12,6 +12,6 @@ const router = Router();
 router.post("/", [authMiddleware, isAdmin], createBookController);
 router.post("/clone/:id", [authMiddleware, isAdmin], cloneBookController);
 router.get("/", getBooksController);
-router.get("/admin", getBookAdminController);
+router.get("/admin",[authMiddleware, isAdmin], getBookAdminController);
 
 export default router;

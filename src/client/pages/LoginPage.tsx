@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useRouter } from "@client/hooks/useRouter";
 import { useAlert } from "@client/context/AlertContext";
+import { ROUTES } from "@client/utils/router";
 
 interface Props {
   error?: string;
@@ -18,7 +19,7 @@ export const LoginPage: React.FC<Props> = ({ error }) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const res = await fetch("/auth/login", {
+    const res = await fetch(ROUTES.LOGIN, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(credentials),
@@ -27,7 +28,7 @@ export const LoginPage: React.FC<Props> = ({ error }) => {
 
     if (res.ok) {
       notify("success", "Reservado correctamente");
-      if (data.user.role === "admin") router.navigate("/books/admin");
+      if (data.user.role === "admin") router.navigate(ROUTES.ADMIN_BOOKS_PAGE);
       else router.navigate("/users/dashboard");
     } else {
       setErrMsg(data.message || "Error al iniciar sesión");

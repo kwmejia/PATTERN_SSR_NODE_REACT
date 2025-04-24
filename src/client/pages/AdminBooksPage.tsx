@@ -1,23 +1,53 @@
-import { AlertProvider, useAlert } from "@client/context/AlertContext";
-import { Book } from "@domain/models/Book";
-import React, { useEffect, useState } from "react";
+// src/presentation/pages/AdminBooksPage.tsx
 
-export const AdminBooksPage: React.FC<{ books: Book[] }> = ({
+import React, { useState } from "react";
+import { useAlert } from "@client/context/AlertContext";
+import { CreateBookModal } from "@client/components/admin-panel/CreateBookModal";
+import { Book } from "@app/types/entities/Books";
+import { handleLogout } from "@client/utils/logout";
+import { HeaderLayout } from "@client/components/layout/HeaderLayout";
+
+interface IProps {
+  books: Book[];
+  user: {
+    id: string;
+    name: string;
+    email: string;
+  };
+}
+
+export const AdminBooksPage: React.FC<IProps> = ({
   books: initialBooks,
+  user,
 }) => {
   const [books, setBooks] = useState<Book[]>(initialBooks);
   const [showModal, setShowModal] = useState(false);
-  const [form, setForm] = useState({ title: "", author: "", quantity: 1 });
+  const [form, setForm] = useState({
+    title: "",
+    author: "",
+    quantity: 1,
+    publishedAt: "",
+  });
 
   const alert = useAlert();
-  const cloneByAuthor = async (author: string) => {
-    const res = await fetch(
-      `/books/clone?author=${encodeURIComponent(author)}`,
-      { method: "POST" }
-    );
+
+  const cloneBook = async (book: Book) => {
+    const newBook = {
+      ...book,
+      title: book.title + " - Copy",
+      publishedAt: new Date(),
+    };
+
+    const res = await fetch(`/books/clone/${book.id}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newBook),
+    });
     if (res.ok) {
-      const newBooks = await res.json();
-      setBooks([...books, ...newBooks]);
+      setBooks([
+        ...books,
+        { ...newBook, publishedAt: newBook.publishedAt.toISOString() },
+      ]);
       alert.notify("success", "Libros clonados exitosamente");
     } else {
       alert.notify("error", "Error al clonar libros");
@@ -25,6 +55,11 @@ export const AdminBooksPage: React.FC<{ books: Book[] }> = ({
   };
 
   const createBook = async () => {
+    if (!form.publishedAt) {
+      alert.notify("error", "La fecha de publicación es obligatoria");
+      return;
+    }
+
     const res = await fetch("/books", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -35,7 +70,7 @@ export const AdminBooksPage: React.FC<{ books: Book[] }> = ({
       const newBook = await res.json();
       setBooks([...books, newBook]);
       setShowModal(false);
-      setForm({ title: "", author: "", quantity: 1 });
+      setForm({ title: "", author: "", quantity: 1, publishedAt: "" });
       alert.notify("success", "Libro creado exitosamente");
     } else {
       alert.notify("error", "Error al crear el libro");
@@ -43,8 +78,8 @@ export const AdminBooksPage: React.FC<{ books: Book[] }> = ({
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
-      <div className="max-w-5xl mx-auto">
+    <HeaderLayout userEmail={user.email} userName={user.name} role={"admin"}>
+      <div className="max-w-5xl mx-auto mt-6">
         <h1 className="text-2xl font-bold text-gray-800 mb-6">
           Administración de libros
         </h1>
@@ -75,10 +110,10 @@ export const AdminBooksPage: React.FC<{ books: Book[] }> = ({
                 <td className="p-3">{book.quantity}</td>
                 <td className="p-3">
                   <button
-                    onClick={() => cloneByAuthor(book.author)}
+                    onClick={() => cloneBook(book)}
                     className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600 transition text-sm"
                   >
-                    Clonar por autor
+                    Clonar
                   </button>
                 </td>
               </tr>
@@ -87,56 +122,16 @@ export const AdminBooksPage: React.FC<{ books: Book[] }> = ({
         </table>
       </div>
 
-      {/* Modal de creación */}
-      {showModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded shadow-lg w-full max-w-md">
-            <h2 className="text-lg font-semibold mb-4">Crear nuevo libro</h2>
-
-            <label className="block mb-2 text-sm">Título:</label>
-            <input
-              type="text"
-              className="w-full border p-2 mb-4 rounded"
-              value={form.title}
-              onChange={(e) => setForm({ ...form, title: e.target.value })}
-            />
-
-            <label className="block mb-2 text-sm">Autor:</label>
-            <input
-              type="text"
-              className="w-full border p-2 mb-4 rounded"
-              value={form.author}
-              onChange={(e) => setForm({ ...form, author: e.target.value })}
-            />
-
-            <label className="block mb-2 text-sm">Cantidad:</label>
-            <input
-              type="number"
-              className="w-full border p-2 mb-4 rounded"
-              value={form.quantity}
-              onChange={(e) =>
-                setForm({ ...form, quantity: parseInt(e.target.value) })
-              }
-              min={1}
-            />
-
-            <div className="flex justify-end gap-2">
-              <button
-                onClick={() => setShowModal(false)}
-                className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
-              >
-                Cancelar
-              </button>
-              <button
-                onClick={createBook}
-                className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-              >
-                Crear
-              </button>
-            </div>
-          </div>
-        </div>
+      {showModal ? (
+        <CreateBookModal
+          form={form}
+          setForm={setForm}
+          onClose={() => setShowModal(false)}
+          onCreate={createBook}
+        />
+      ) : (
+        <></>
       )}
-    </div>
+    </HeaderLayout>
   );
 };

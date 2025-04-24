@@ -1,15 +1,15 @@
 import React from "react";
 import { renderToString } from "react-dom/server";
 import { AppShell } from "@client/AppShell";
-import { Book } from "@app/types/entities/Books";
 import { JwtPayload } from "@app/types/JwtPayload";
+import { Reservation } from "@domain/models/Reservation";
 
-export function renderAdminBooksView(books: Book[], user: JwtPayload) {
+export function renderAdminReservationsView(reservations: Reservation[], user: JwtPayload) {
   const html = renderToString(
     <AppShell
-      pageId="booksAdmin"
+      pageId="reservationsAdmin"
       props={{
-        books,
+        reservations,
         user
       }}
     />

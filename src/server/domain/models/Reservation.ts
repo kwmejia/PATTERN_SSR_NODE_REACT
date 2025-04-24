@@ -22,10 +22,10 @@ export class Reservation {
   book!: Book;
 
   @Column({ type: "timestamp" })
-  reservedAt: Date;
+  reservedAt: Date | string;
 
   @Column({ type: "timestamp" })
-  expiresAt: Date;
+  expiresAt: Date | string;
 
   constructor(user?: User, book?: Book, reservedAt?: Date, expiresAt?: Date) {
     if (user) this.user = user;

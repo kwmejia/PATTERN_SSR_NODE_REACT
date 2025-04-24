@@ -1,4 +1,4 @@
-import { UserBehavior } from "@domain/factories/UserBehavior";
+import { UserBehavior } from "@domain/factories/behavior/UserBehavior";
 
 /**
  * Interface for user role-based behavior factories.
