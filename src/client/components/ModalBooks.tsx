@@ -47,7 +47,9 @@ export const ModalBooks = ({
 
       if (resp.ok) {
         callReservations();
+        // Notificar a todos los observadores
         notifier.notify(await resp.json());
+        // Cerrar el modal
         onCloseModal();
       } else {
         const { message } = await resp.json();

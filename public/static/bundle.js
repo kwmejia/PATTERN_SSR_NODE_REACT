@@ -311,7 +311,7 @@ eval("\nvar __importDefault = (this && this.__importDefault) || function (mod) {
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
-eval("\nObject.defineProperty(exports, \"__esModule\", ({ value: true }));\nexports.ReservationNotifier = void 0;\nclass ReservationNotifier {\n    constructor() {\n        this.observers = [];\n    }\n    subscribe(observer) {\n        this.observers.push(observer);\n    }\n    notify(data) {\n        console.log(data);\n        for (const observer of this.observers) {\n            observer.update(data);\n        }\n    }\n}\nexports.ReservationNotifier = ReservationNotifier;\n\n\n//# sourceURL=webpack://patrones-de-software/./src/client/observer/ReservationNotifier.ts?");
+eval("\nObject.defineProperty(exports, \"__esModule\", ({ value: true }));\nexports.ReservationNotifier = void 0;\nclass ReservationNotifier {\n    constructor() {\n        this.observers = [];\n    }\n    subscribe(observer) {\n        this.observers.push(observer);\n    }\n    notify(data) {\n        for (const observer of this.observers) {\n            observer.update(data);\n        }\n    }\n}\nexports.ReservationNotifier = ReservationNotifier;\n\n\n//# sourceURL=webpack://patrones-de-software/./src/client/observer/ReservationNotifier.ts?");
 
 /***/ }),
 
