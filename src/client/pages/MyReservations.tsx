@@ -12,6 +12,7 @@ export const MyReservations = ({ reservations }: IPropsMyReservations) => {
   if (reservations.length === 0) {
     return <p className="text-gray-500">Aún no tienes libros reservados.</p>;
   }
+  
   return (
     <ul className="space-y-4"> 
       {reservations.map((r) => (

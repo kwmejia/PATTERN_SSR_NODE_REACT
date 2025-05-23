@@ -1,4 +1,5 @@
 import { useAlert } from "@client/context/AlertContext";
+import { createReservationNotifier } from "@client/observer/ReservationObserverFactory";
 import { Book } from "@domain/models/Book";
 import React, { useEffect, useState } from "react";
 
@@ -17,6 +18,8 @@ export const ModalBooks = ({
   const [books, setBooks] = useState<Book[]>([]);
   const [error, setError] = useState<string>("");
   const alert = useAlert();
+  const notifier = createReservationNotifier(callReservations, alert);
+
   useEffect(() => {
     onMounted();
   }, []);
@@ -44,6 +47,7 @@ export const ModalBooks = ({
 
       if (resp.ok) {
         callReservations();
+        notifier.notify(await resp.json());
         onCloseModal();
       } else {
         const { message } = await resp.json();
